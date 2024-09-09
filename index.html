@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de senha</title>
+    <style>
+        * {
+            font-family: sans-serif;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #18181b;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .logo {
+            max-width: 600px;
+            margin-bottom: 24px;
+        }
+        .container {
+            max-width: 480px;
+            margin: 14px;
+        }
+        .container span {
+            color: white;
+            font-size: 22px;
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            border-radius: 5px;
+            background: #DFDFDF;
+            height: 18px;
+            outline: none;
+            margin-top: 8px;
+        }
+        .button-cta {
+            height: 40px;
+            background-color: green;
+            border: 0;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 40px;
+            color: #FFF;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .container-password {
+            max-width: 480px;
+            margin-top: 18px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            height: 40px;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 28px;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+        .password {
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.40);
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            margin-bottom: 10px;
+            margin: 10px;
+            border: 1px solid #313131;
+            transition: transform 0.5s;
+        }
+        .password:hover {
+            transform: scale(1.05);
+        }
+        .tooltip {
+            color: white;
+            position: relative;
+            top: 20px;
+            padding: 6px 8px;
+            background: rgb(15, 15, 15);
+            text-align: center;
+            font-size: 16px;
+            border-radius: 6px;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.5s;
+        }
+        .container-password:hover .tooltip {
+            visibility: visible;
+            bottom: 50px;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <img class="logo" src="Imagens/logo.png" alt="Gerador de senha logo">
+
+    <main class="container">
+        <span>Tamanho <span id="valor">10</span> caracteres</span>
+        <input id="slider" class="slider" type="range" min="5" max="25" value="10">
+        <button id="button" class="button-cta">Gerar senha</button>
+    </main>
+
+    <div id="container-password" class="container-password hide">
+        <span class="title">Sua senha gerada foi:</span>
+        <span id="password" class="password">155151515</span>
+        <span class="tooltip">Clique na senha para copiar</span>
+    </div>
+
+    <script>
+        const sliderElement = document.querySelector("#slider");
+        const buttonElement = document.querySelector("#button");
+        const passwordElement = document.querySelector("#password");
+        const containerPassword = document.querySelector("#container-password");
+        const valorElement = document.querySelector("#valor");
+
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+        let newPassword = "";
+
+        // Atualiza o valor do slider dinamicamente
+        sliderElement.oninput = function() {
+            valorElement.innerHTML = this.value;
+        }
+
+        // Gerar senha ao clicar no botão
+        buttonElement.addEventListener("click", function() {
+            let pass = "";
+            for (let i = 0; i < sliderElement.value; i++) {
+                pass += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+
+            newPassword = pass;
+            passwordElement.innerHTML = newPassword;
+            containerPassword.classList.remove("hide");
+        });
+
+        // Copiar senha ao clicar na senha gerada
+        passwordElement.addEventListener("click", function() {
+            navigator.clipboard.writeText(newPassword).then(function() {
+                alert("Senha copiada para a área de transferência!");
+            });
+        });
+
+        // Inicializa o valor exibido no slider
+        valorElement.innerHTML = sliderElement.value;
+    </script>
+</body>
+</html>
